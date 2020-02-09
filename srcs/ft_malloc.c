@@ -43,23 +43,6 @@ static int initializer()
 	return EXIT_SUCCESS;
 }
 
-static void	*find_good_malloc(size_t size)
-{
-	t_block *tmp = g_page.h_tiny_block;
-
-	while (tmp) {
-		if (tmp->free == 0 && tmp->size >= size) {
-			tmp->free = 1;
-			printf("start big = %d\n", (int)tmp->ptr);
-			return (tmp->ptr);
-		}
-		printf("avant tmp next\n");
-		tmp = tmp->next;
-		printf("apr tmp next\n");
-	}
-	printf("NEED TO RE ALLOC\n");
-	return NULL;
-}
 
 static void	*create_big_malloc(size_t size)
 {

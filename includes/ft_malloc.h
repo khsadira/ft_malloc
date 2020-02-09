@@ -32,6 +32,8 @@ typedef struct	s_page {
 t_page	g_page;
 
 void	*ft_malloc(size_t size);
+void	*find_good_malloc(size_t size);
+
 void	ft_free(void *ptr);
 
 #endif
