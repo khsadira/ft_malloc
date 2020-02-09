@@ -4,6 +4,7 @@ int main()
 {
 	char *tmp2;
 	char *tmp;
+
 	if ((tmp = ft_malloc(PAGE_SIZE / 31)) == NULL && (tmp2 = ft_malloc(PAGE_SIZE / 32 + -1)) == NULL)
 	{
 		printf ("we got a null\n");
@@ -20,6 +21,5 @@ int main()
 	for (int i =0; i < PAGE_SIZE / 31; i ++) {
 		tmp[i] = 'a' + i % 26;
 	}
-	//printf("%s\n%s\n", tmp, tmp2);
 	return EXIT_SUCCESS;
 }

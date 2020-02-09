@@ -26,7 +26,7 @@ void		*find_good_malloc(size_t size)
 	return ret;
 }
 
-static int	add_tiny_blocks(void *big_alloc, size_t current_size, t_block *new_block)
+static size_t	add_tiny_blocks(void *big_alloc, size_t current_size, t_block *new_block)
 {
 
 	while (current_size < INIT_SIZE / 3)
@@ -54,7 +54,7 @@ static int	add_tiny_blocks(void *big_alloc, size_t current_size, t_block *new_bl
 	return current_size;
 }
 
-static int	add_small_blocks(void *big_alloc, size_t current_size, t_block *new_block)
+static size_t	add_small_blocks(void *big_alloc, size_t current_size, t_block *new_block)
 {
 	while (current_size < INIT_SIZE)
 	{

@@ -1,24 +1,13 @@
 # include "ft_malloc.h"
 
-static void	*create_big_malloc(size_t size)
+static void		*add_big_block(void *big_alloc, size_t size)
 {
-	void	*big_alloc;
 	t_block	*new_block;
-	size_t	current_size;
 
-	if ((big_alloc = mmap(0, SIZE_BLOCK + size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, 0, 0)) == (void *)-1) {
-		perror("mmap_failed");
-		return NULL;
-	}
-
-	current_size = 0;
-	new_block = (t_block *)(big_alloc + (current_size));
-	current_size += SIZE_BLOCK;
-
+	new_block = (t_block *)big_alloc;
 	new_block->size = size;
-	new_block->ptr = big_alloc + current_size;
+	new_block->ptr = big_alloc + SIZE_BLOCK;
 	new_block->free = 0;
-
 	new_block->prev = g_page.l_big_block;
 	new_block->next = NULL;
 
@@ -33,6 +22,19 @@ static void	*create_big_malloc(size_t size)
 		g_page.l_big_block = new_block;
 	}
 	return new_block->ptr;
+}
+
+static void		*create_big_malloc(size_t size)
+{
+	void	*big_alloc;
+	t_block	*new_block;
+
+	if ((big_alloc = mmap(0, SIZE_BLOCK + size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, 0, 0)) == (void *)-1) {
+		perror("mmap_failed");
+		return NULL;
+	}
+
+	return add_big_block(big_alloc, size);
 }
 
 void		*ft_malloc(size_t size)
