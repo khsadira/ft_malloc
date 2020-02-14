@@ -7,34 +7,46 @@
 # include	<sys/mman.h>
 
 # define 	PAGE_SIZE	getpagesize()
-# define 	TINY_SIZE	PAGE_SIZE / 32
-# define 	SMALL_SIZE	PAGE_SIZE
-# define 	INIT_SIZE	64 * PAGE_SIZE
+
+# define 	TINY_SIZE	PAGE_SIZE / 16
+# define 	SMALL_SIZE	PAGE_SIZE * 40
+
+# define 	INIT_SIZE	PAGE_SIZE * 4096
+
 # define 	SIZE_BLOCK	sizeof(t_block)
+# define	SIZE_TINY_META size(t_tiny_metadata)
+# define 	SIZE_SMALL_META sizeof(t_small_metadata)
+# define 	SIZE_HEAVY_META sizeof(t_heavy_metadata)
+
+# define 	TINY_REGION_SIZE 	TINY_SIZE * 800
+# define 	SMALL_REGION_SIZE	SMALL_SIZE * 100
 
 typedef struct	s_block {
 	size_t			size;
-	int				free;
+	char 			free;
 	void			*ptr;
 	struct s_block	*next;
-	struct s_block	*prev;
 }				t_block;
 
+typedef struct	s_tiny_metadata {
+	s_block		next_tiny_metadata
+
+}				t_tiny_metadata;
+
+typedef struct	s_small_metadata {
+}				t_small_metadata;
+
+typedef struct 	s_heavy_metadata {
+	*s_heavy_metadata
+}				t_heavy_metadata;
+
 typedef struct	s_page {
-	t_block	*h_tiny_block;
-	t_block	*l_tiny_block;
-	t_block	*h_small_block;
-	t_block	*l_small_block;
-	t_block *h_big_block;
-	t_block *l_big_block;
+	t_tiny_metadata		tiny_metadata;
+	t_small_metadata	small_metadata;
+	t_heavy_metadata	heavy_metadata;
 }				t_page;
 
 t_page	g_page;
 
-void	*ft_malloc(size_t size);
-int 	initialize_malloc();
-void	*find_good_malloc(size_t size);
-
-void	ft_free(void *ptr);
 
 #endif
