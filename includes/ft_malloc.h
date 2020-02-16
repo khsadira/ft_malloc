@@ -14,9 +14,9 @@
 # define 	INIT_SIZE	PAGE_SIZE * 4096
 
 # define 	SIZE_BLOCK	sizeof(t_block)
-# define	SIZE_TINY_META size(t_tiny_metadata)
-# define 	SIZE_SMALL_META sizeof(t_small_metadata)
-# define 	SIZE_HEAVY_META sizeof(t_heavy_metadata)
+# define	SIZE_TINY_REGION sizeof(t_tiny_region)
+# define 	SIZE_SMALL_REGION sizeof(t_small_region)
+# define 	SIZE_HEAVY_REGION sizeof(t_heavy_region)
 
 # define 	TINY_REGION_SIZE 	TINY_SIZE * 800
 # define 	SMALL_REGION_SIZE	SMALL_SIZE * 100
@@ -28,25 +28,38 @@ typedef struct	s_block {
 	struct s_block	*next;
 }				t_block;
 
-typedef struct	s_tiny_metadata {
-	s_block		next_tiny_metadata
+typedef struct	s_tiny_region {
+	struct s_tiny_region	*next_tiny_region;
+	t_block					*head_block;
+	t_block 				*next_block_free;
+}				t_tiny_region;
 
-}				t_tiny_metadata;
+typedef struct	s_small_region {
+	struct s_small_region	*next_small_region;
+	t_block 				*next_block_free;
+}				t_small_region;
 
-typedef struct	s_small_metadata {
-}				t_small_metadata;
-
-typedef struct 	s_heavy_metadata {
-	*s_heavy_metadata
-}				t_heavy_metadata;
+typedef struct 	s_heavy_region {
+	struct s_heavy_region	*next_heavy_region;
+	t_block 				*next_block_free;
+}				t_heavy_region;
 
 typedef struct	s_page {
-	t_tiny_metadata		tiny_metadata;
-	t_small_metadata	small_metadata;
-	t_heavy_metadata	heavy_metadata;
+	t_tiny_region	*tiny_region;
+	t_small_region	*small_region;
+	t_heavy_region	*heavy_region;
 }				t_page;
 
 t_page	g_page;
 
+void	*ft_malloc(size_t size);
+int		initialize();
+void	show_alloc_mem();
+void	*find_next_allocated_block(t_block *block);
+void	*get_first_region_block(void *region);
+void	*get_tiny_allocated_block(size_t size);
+void	*get_small_allocated_block(size_t size);
+void	*get_heavy_allocated_block(size_t size);
+t_block *create_new_block(void *start_ptr, size_t size);
 
 #endif

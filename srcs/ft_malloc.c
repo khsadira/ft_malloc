@@ -3,7 +3,6 @@
 static void		*create_big_alloc(size_t size)
 {
 	void	*big_alloc;
-	t_block	*new_block;
 
 	if ((big_alloc = mmap(0, size, PROT_EXEC | PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, 0, 0)) == (void *)-1)
 	{
@@ -19,16 +18,25 @@ int		initialize()
 
 	if (!(big_alloc = create_big_alloc(INIT_SIZE)))
 		return (1);
-	g_page.tiny_block = big_alloc;
-	g_page.small_block = big_alloc + TINY_REGION_SIZE;
+	g_page.tiny_region = big_alloc;
+	g_page.small_region = big_alloc + TINY_REGION_SIZE;
 	return (0);
 }
 
 void		*ft_malloc(size_t size)
 {
-	if (g_page == NULL)
+	void	*ret;
+
+	if (!g_page.tiny_region || !g_page.small_region)
 		initialize();
-	if (g_page == NULL)
-		printf("cest pas bon\n");
+
+	if (size < TINY_SIZE)
+		ret = get_tiny_allocated_block(size);
+	else if (size < SMALL_SIZE)
+		ret = get_small_allocated_block(size);
+	else
+		ret = get_heavy_allocated_block(size);
+
+	return ret;
 }
 
