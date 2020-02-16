@@ -17,7 +17,7 @@ t_block	*create_new_block(void *start_ptr, size_t size)
 	block = start_ptr;
 	block->size = size;
 	block->free = 0;
-	block->ptr = block + SIZE_BLOCK;
+	block->ptr = start_ptr + SIZE_BLOCK;
 	block->next = NULL;
 	return block;
 }
@@ -26,14 +26,15 @@ void	*get_tiny_allocated_block(size_t size)
 {
 	t_block		*block;
 
-	block = g_page.tiny_region->head_block;
-	if (block == NULL)
+	if (!g_page.tiny_region->head_block)
 	{
 		block = create_new_block(g_page.tiny_region + SIZE_TINY_REGION, size);
 		g_page.tiny_region->head_block = block;
 		block->free = 1;
 		return block;
 	}
+
+	block = g_page.tiny_region->head_block;
 	while (block->next)
 	{
 		if (block->size >= size && block->free == 0)
@@ -43,6 +44,7 @@ void	*get_tiny_allocated_block(size_t size)
 		}
 		block = block->next;
 	}
+
 	if (block->size >= size && block->free == 0)
 	{
 		block->free = 1;
