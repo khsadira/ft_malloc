@@ -36,11 +36,13 @@ typedef struct	s_tiny_region {
 
 typedef struct	s_small_region {
 	struct s_small_region	*next_small_region;
+	t_block					*head_block;
 	t_block 				*next_block_free;
 }				t_small_region;
 
 typedef struct 	s_heavy_region {
 	struct s_heavy_region	*next_heavy_region;
+	t_block					*head_block;
 	t_block 				*next_block_free;
 }				t_heavy_region;
 
@@ -55,8 +57,6 @@ t_page	g_page;
 void	*ft_malloc(size_t size);
 int		initialize();
 void	show_alloc_mem();
-void	*find_next_allocated_block(t_block *block);
-void	*get_first_region_block(void *region);
 void	*get_tiny_allocated_block(size_t size);
 void	*get_small_allocated_block(size_t size);
 void	*get_heavy_allocated_block(size_t size);
