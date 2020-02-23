@@ -40,7 +40,7 @@ void	*get_tiny_allocated_block(size_t size)
 {
 	t_block		*block;
 
-	if (!g_page.tiny_region->head_block)
+	if (g_page.tiny_region && !g_page.tiny_region->head_block)
 	{
 		block = create_new_block(g_page.tiny_region + SIZE_TINY_REGION, size);
 		g_page.tiny_region->head_block = block;
@@ -55,7 +55,7 @@ void	*get_small_allocated_block(size_t size)
 {
 	t_block	*block;
 
-	if (!g_page.small_region->head_block)
+	if (g_page.small_region && !g_page.small_region->head_block)
 	{
 		block = create_new_block(g_page.small_region + SIZE_SMALL_REGION, size);
 		g_page.small_region->head_block = block;
@@ -69,5 +69,11 @@ void	*get_small_allocated_block(size_t size)
 
 void	*get_heavy_allocated_block(size_t size)
 {
+	t_block	*block;
+
+	if (g_page.heavy_region && !g_page.heavy_region->head_block)
+	{
+		return NULL;
+	}
 	return NULL;
 }
