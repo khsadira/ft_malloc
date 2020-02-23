@@ -18,8 +18,10 @@ int		initialize()
 
 	if (!(big_alloc = create_big_alloc(INIT_SIZE)))
 		return (1);
+
 	g_page.tiny_region = big_alloc;
 	g_page.small_region = big_alloc + TINY_REGION_SIZE;
+
 	return (0);
 }
 
